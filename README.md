@@ -5,6 +5,10 @@ Update whenever I feel like it ;)
 ## What is HoloUI? ##
 HoloUI is a UI mod that changes most of the UI design of the game to look more modern, it's also highly customizable!
 
+## What is in this fork?
+Support for the burstfire mod.
+That comes with the sacrifice of the fire indicator is now A(uto), S(ingle), and B(urst) instead of dots.
+
 ## Features ##
  - Changes the design of payday 2's UI almost entirely.
  - A better chat with scrolling, copy pasting and site links support.

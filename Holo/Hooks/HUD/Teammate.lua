@@ -22,7 +22,7 @@ Holo:Post(HUDTeammate, "init", function(self)
 		cable:child("bg"),
 		dep:child("bg"),
 		nades:child("bg"),
-		primary:child("bg"), 
+		primary:child("bg"),
 		secondary:child("bg"),
 		primary:child("weapon_selection"):child("weapon_selection"),
 		secondary:child("weapon_selection"):child("weapon_selection")
@@ -68,7 +68,7 @@ function HUDTeammate:UpdateHolo()
 	local me = self._main_player
 	local bg_color = Holo:GetColor("Colors/Teammate")
 	local text_color = Holo:GetColor("TextColors/Teammate")
-	
+
 	local minime = me and Holo.Options:GetValue("CompactPlayer")
 	local minitm = minime or not me and Holo.Options:GetValue("CompactTeammates")
 	local mightbeme = me or Holo.Options:GetValue("ShowTeammatesFullAmmo")
@@ -120,7 +120,7 @@ function HUDTeammate:UpdateHolo()
 	})
 	bg:set_bottom(self:calc_panel_height())
 	if self._ai then
-		nbg:set_bottom(self:calc_panel_height())	
+		nbg:set_bottom(self:calc_panel_height())
 	else
 		nbg:set_bottom(bg:y() - 4)
 	end
@@ -133,7 +133,7 @@ function HUDTeammate:UpdateHolo()
 	weapons_panel:set_size(weap_w, weap_h)
 	weapons_panel:set_x(bg:x() + 7)
 	weapons_panel:set_center_y(bg:center_y())
-	
+
 	for i, panel in pairs({primary_weapon_panel, secondary_weapon_panel}) do
 		local ammo_total = panel:child("ammo_total")
 		local ammo_clip = panel:child("ammo_clip")
@@ -161,7 +161,7 @@ function HUDTeammate:UpdateHolo()
 	--Equipments
 	deployable_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y() - (minitm and 2 or -1), minitm and 32 or 36, minitm and 16 or 20)
 	local eq_size = deployable_panel:h() - 4
-	
+
 	deployable:set_color(text_color)
 	for _, v in pairs({deployable_panel, cableties_panel, grenades_panel}) do
 		v:child("amount"):configure({
@@ -213,7 +213,7 @@ function HUDTeammate:set_radials()
 			child:set_size(panel:size())
 		end
 	end
-	
+
 	local full_size = {
 		"radial_bg",
 		"radial_health",
@@ -285,15 +285,15 @@ function HUDTeammate:_create_firemode(is_secondary)
 		local firemode = weapon_selection_panel:text({
 			name = "firemode",
 			color = Holo:GetColor("TextColors/Teammate"),
-			text = ":",
+			text = "A",
 			font = "fonts/font_medium_mf",
 			font_size = 24,
-			x = 4,
+			x = 3.85,
 			w = 24,
 			h = 24,
 		})
 		firemode:set_bottom(weapon_selection_panel:h() - 1)
-		if locked_to_single or not locked_to_auto and fire_mode == "single" then firemode:set_text(".") end
+		if locked_to_single or not locked_to_auto and fire_mode == "single" then firemode:set_text("S") end
 	end
 end
 
@@ -301,7 +301,15 @@ function HUDTeammate:set_weapon_firemode(id, firemode)
 	local weapon_panel = self._player_panel:child("weapons_panel"):child((id == 1 and "secondary" or "primary") .. "_weapon_panel")
 	local weapon_selection_panel = weapon_panel:child("weapon_selection")
 	local firemode_text = weapon_selection_panel:child("firemode")
-	if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "." or ":") end
+	if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "S" or "A") end
+end
+
+-- Support for the burstfire mod
+function HUDTeammate:set_weapon_firemode_burst(id)
+	local weapon_panel = self._player_panel:child("weapons_panel"):child((id == 1 and "secondary" or "primary") .. "_weapon_panel")
+	local weapon_selection_panel = weapon_panel:child("weapon_selection")
+	local firemode_text = weapon_selection_panel:child("firemode")
+	if alive(firemode_text) then firemode_text:set_text("B") end
 end
 
 function HUDTeammate:set_state(state)
@@ -346,7 +354,7 @@ function HUDTeammate:set_talking(talking)
 end
 
 function HUDTeammate:layout_special_equipments(no_align_hud)
-	self._equipments_h = 0	
+	self._equipments_h = 0
 	local w = self._panel:w()
 	local name = self._panel:child("name")
 	local bg = self._player_panel:child("Mainbg")
@@ -354,7 +362,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 	local text_color = Color.white
 	local bg_color = Holo:GetColor("Colors/Teammate")
 	local bg_alpha = Holo.Options:GetValue("HUDAlpha")
-	local rows = 1	
+	local rows = 1
 	local prev
 	local minime = self._main_player and Holo.Options:GetValue("CompactPlayer")
 	local minitm = minime or not self._main_player and Holo.Options:GetValue("CompactTeammates")
@@ -376,7 +384,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 			main:set_name("bitmap")
 			main:script().fixed = true
 		end
-		
+
 		if alive(amount) then
 			amount:configure({
 				font_size = panel:h(),

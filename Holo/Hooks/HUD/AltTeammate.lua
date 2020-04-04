@@ -7,7 +7,7 @@ function HUDTeammate:ResizeValueText(p, font_size)
 	local l = p:child("Line")
 	local t = p:child("Text")
 	local ot = t:text()
-	t:set_text("100 ")	
+	t:set_text("100 ")
 	t:set_font_size(font_size)
 	managers.hud:make_fine_text(t)
 	t:set_text(ot)
@@ -21,7 +21,7 @@ function HUDTeammate:MakeValueText(panel, name)
 	local l = p:rect({
 		name = "Line",
 		w = 2,
-		h = p:h() - 2,		
+		h = p:h() - 2,
 		color = Holo:GetColor("TextColors/"..name)
 	})
 	local t = p:text({
@@ -33,7 +33,7 @@ function HUDTeammate:MakeValueText(panel, name)
 		vertical = "center",
 		font = "fonts/font_large_mf"
 	})
-	return p	
+	return p
 end
 Holo:Post(HUDTeammate, "init", function(self)
 	if not alive(self._player_panel) or not alive(self._player_panel:child("radial_health_panel")) then
@@ -42,7 +42,7 @@ Holo:Post(HUDTeammate, "init", function(self)
 	end
 
 	self._equipments_h = 0
-	
+
 	self:MakeValueText(self._player_panel, "Health")
 	self:MakeValueText(self._player_panel, "Armor")
 	self:MakeValueText(self._player_panel, "ArmorAbsorb"):set_alpha(0)
@@ -101,7 +101,7 @@ function HUDTeammate:DebugWithAI()
 	self:set_ammo_amount_by_type("secondary", 100, 50, 50, 10)
 end
 
-function HUDTeammate:GetNameWidth()	
+function HUDTeammate:GetNameWidth()
 	local _,_,w,_ = self._panel:child("name"):text_rect()
 	return (self._main_player and not Holo.Options:GetValue("MyName")) and 0 or w
 end
@@ -110,8 +110,8 @@ function HUDTeammate:UpdateHolo()
 	--if self._ai then
 	--	self:DebugWithAI()
 	--end
-	
-	self:set_avatar()		
+
+	self:set_avatar()
 	local weapons_panel = self._player_panel:child("weapons_panel")
 	local secondary = weapons_panel:child("secondary_weapon_panel")
 	local primary = weapons_panel:child("primary_weapon_panel")
@@ -134,7 +134,7 @@ function HUDTeammate:UpdateHolo()
 	local large_tm = me and not Holo.Options:GetValue("MyName")
 	local compact = self._forced_compact or (self._ai or not me and Holo.Options:GetValue("CompactTeammate"))
 	local font_size = compact and (me and 28 or 24) or (me and (large_tm and 24 or 18) or 14)
-	
+
 	name:configure({
         color = Holo.Options:GetValue("NameColored") and teammate_line:color() or text_color,
 		font_size = large_tm and 0 or font_size,
@@ -142,7 +142,7 @@ function HUDTeammate:UpdateHolo()
 		font = "fonts/font_large_mf",
 	})
 	managers.hud:make_fine_text(name)
-	managers.hud:align_teammate_panels()		
+	managers.hud:align_teammate_panels()
 
 	bg:set_size(self._panel:w(), self._panel:h() - self._equipments_h)
 	bg:set_rightbottom(self._panel:size())
@@ -151,7 +151,7 @@ function HUDTeammate:UpdateHolo()
 	avatar:set_leftbottom(bg:leftbottom())
 	name_bg:set_size(large_tm and 0 or name:w() + 4, name:h())
 	name_bg:set_position(avatar:right() + (avatar_enabled and 4 or 8), bg:top() + 4)
-	
+
 	if compact then
 		name_bg:set_center_y(avatar:center_y() + 1)
 	else
@@ -171,7 +171,7 @@ function HUDTeammate:UpdateHolo()
 			local peer = self._peer_id and managers.network:session():peer(self._peer_id)
 			has_duke_perk = peer and managers.skilltree:unpack_from_string(peer:skills()).specializations[1] == "19" or false
 		end
-		ddp:set_alpha(self._main_player and has_duke_perk and 1 or 0)		
+		ddp:set_alpha(self._main_player and has_duke_perk and 1 or 0)
 		ap:set_alpha(has_duke_perk and 0 or 1)
 		sp:set_position(hp:right() + 2, hp:y())
 		abp:set_position(hp:right() + 2, ap:y())
@@ -181,7 +181,7 @@ function HUDTeammate:UpdateHolo()
 	teammate_line:set_size(large_tm and 0 or 2, name:h() - 2)
 	teammate_line:set_x(name_bg:x())
 	teammate_line:set_center_y(name:center_y() - 1)
-			
+
 	--Weapons
 	local ww = show_all and 54 or 48
 	if show_all then
@@ -190,12 +190,12 @@ function HUDTeammate:UpdateHolo()
 		weapons_panel:set_size(ww, 64)
 	end
 	weapons_panel:set_righttop(bg:right() - 8, hp:y())
-	
+
 	for i, panel in pairs({primary, secondary}) do
 		panel:child("bg"):hide()
 		panel:show()
-		local selection = panel:child("weapon_selection")			
-		local ammo_total = panel:child("ammo_total")			
+		local selection = panel:child("weapon_selection")
+		local ammo_total = panel:child("ammo_total")
 		local ammo_clip = panel:child("ammo_clip")
 		ammo_total:set_font_size(font_size)
 		ammo_clip:set_font_size(font_size)
@@ -217,7 +217,7 @@ function HUDTeammate:UpdateHolo()
 
 			 if i == 2 then
 				panel:set_y(primary:bottom() + 2)
-			end 
+			end
 		else
 			panel:set_size(weapons_panel:size())
 			local sec = i==2
@@ -229,15 +229,15 @@ function HUDTeammate:UpdateHolo()
 	end
 	--Weapons end
 
-	--Equipments	
+	--Equipments
 	local dep = self._player_panel:child("deployable_equipment_panel")
 	local cable = self._player_panel:child("cable_ties_panel")
 	local nades = self._player_panel:child("grenades_panel")
 
 	local padding = 8
 	local eq_w = (weapons_panel:right() - teammate_line:x() - padding * 2) / 3
-	
-	dep:set_shape(teammate_line:x(), avatar:bottom() - 4 - font_size, eq_w, font_size)		
+
+	dep:set_shape(teammate_line:x(), avatar:bottom() - 4 - font_size, eq_w, font_size)
 	cable:set_shape(dep:x() + eq_w + padding, dep:y(), dep:size())
 	nades:set_shape(cable:x() + eq_w + padding, dep:y(), dep:size())
 
@@ -254,7 +254,7 @@ function HUDTeammate:UpdateHolo()
 		})
 		v:child("amount"):set_center_y(v:h() / 2)
 	end
-	 
+
 	--just call them icon we already know what these bitmaps are thanks to the panel.
 	local nades_icon = nades:child("grenades_icon")
 	for _, v in pairs({nades_icon, cable:child("cable_ties"), dep:child("equipment")}) do
@@ -275,17 +275,17 @@ function HUDTeammate:UpdateHolo()
 	condition_icon:set_size(condition_font_size, condition_font_size)
 	condition_timer:set_font_size(condition_font_size)
 	condition_timer:set_shape(condition_icon:shape())
-	
+
 	if compact then
 		condition_icon:set_rightbottom(self._panel:w() - 2, self._panel:h() - 2)
-		condition_timer:set_rightbottom(condition_icon:leftbottom())		
+		condition_timer:set_rightbottom(condition_icon:leftbottom())
 	else
 		condition_icon:set_position(teammate_line:right() + 2, hp:y() + 1)
-		condition_timer:set_leftbottom(condition_icon:rightbottom())		
+		condition_timer:set_leftbottom(condition_icon:rightbottom())
 	end
 
 	--Equipments end
-	
+
 	--hide stuff that we don't need
 	Utils:Apply({hp, ap, abp, sp, ddp, dep, cable, nades, weapons_panel}, {visible = not compact})
 	Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HUDAlpha")})
@@ -313,15 +313,15 @@ function HUDTeammate:_create_firemode(is_secondary)
 		local firemode = weapon_selection_panel:text({
 			name = "firemode",
 			color = Holo:GetColor("TextColors/Teammate"),
-			text = ":",
+			text = "A",
 			font = "fonts/font_medium_mf",
 			font_size = 24,
-			x = 4,
+			x = 3.85,
 			w = 24,
 			h = 24,
 		})
 		firemode:set_bottom(weapon_selection_panel:h() - 1)
-		if locked_to_single or not locked_to_auto and fire_mode == "single" then firemode:set_text(".") end
+		if locked_to_single or not locked_to_auto and fire_mode == "single" then firemode:set_text("S") end
 	end
 end
 
@@ -329,13 +329,21 @@ function HUDTeammate:set_weapon_firemode(id, firemode)
 	local weapon_panel = self._player_panel:child("weapons_panel"):child((id == 1 and "secondary" or "primary") .. "_weapon_panel")
 	local weapon_selection_panel = weapon_panel:child("weapon_selection")
 	local firemode_text = weapon_selection_panel:child("firemode")
-	if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "." or ":") end
+	if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "S" or "A") end
+end
+
+-- Support for the burstfire mod
+function HUDTeammate:set_weapon_firemode_burst(id)
+	local weapon_panel = self._player_panel:child("weapons_panel"):child((id == 1 and "secondary" or "primary") .. "_weapon_panel")
+	local weapon_selection_panel = weapon_panel:child("weapon_selection")
+	local firemode_text = weapon_selection_panel:child("firemode")
+	if alive(firemode_text) then firemode_text:set_text("B") end
 end
 
 function HUDTeammate:_set_weapon_selected(id, hud_icon)
 	local is_secondary = id == 1
 	local wep_panel = self._player_panel:child("weapons_panel")
-	
+
 	play_value(wep_panel:child("secondary_weapon_panel"), "alpha", is_secondary and 1 or 0.65)
 	play_value(wep_panel:child("primary_weapon_panel"), "alpha", is_secondary and 0.65 or 1)
 end
@@ -364,7 +372,7 @@ end
 function HUDTeammate:set_holo_health(data)
 	local Health = self._player_panel:child("Health")
 	local val = data.current / data.total
-	play_color(Health:child("Line"), Holo:GetColor("Colors/Health") * val + Holo:GetColor("Colors/HealthNeg") * (1 - val))		
+	play_color(Health:child("Line"), Holo:GetColor("Colors/Health") * val + Holo:GetColor("Colors/HealthNeg") * (1 - val))
 	Health:child("Text"):set_text(string.format("%i", data.current * tweak_data.gui.stats_present_multiplier))
 end
 
@@ -380,7 +388,7 @@ Holo:Post(HUDTeammate, "set_ability_radial", function(self, data)
 	local p = data.current / data.total
 	play_value(skill, "alpha", p > 0 and 1 or 0)
 	skill:child("Text"):set_text(string.format("%i%%", p * 100))
-	play_color(skill:child("Line"), Holo:GetColor("Colors/Skill") * p + Holo:GetColor("TextColors/Teammate") * (1 - p))	
+	play_color(skill:child("Line"), Holo:GetColor("Colors/Skill") * p + Holo:GetColor("TextColors/Teammate") * (1 - p))
 end)
 
 Holo:Post(HUDTeammate, "activate_ability_radial", function(self, time_left, time_total)
@@ -449,7 +457,7 @@ Holo:Post(HUDTeammate, "update_delayed_damage", function(self)
 	end
 	local damage = self._delayed_damage or 0
 	local DelayedDamage = self._player_panel:child("DelayedDamage")
-	local armor_current = self._armor_data.current	
+	local armor_current = self._armor_data.current
 	local health_max = self._health_data.total
 	local health_current = self._health_data.current
 	local health_ratio = self._player_panel:child("radial_health_panel"):child("radial_health"):color().r
@@ -507,7 +515,7 @@ Holo:Pre(HUDTeammate, "add_special_equipment", function(self, data)
 end)
 
 function HUDTeammate:layout_special_equipments(no_align_hud)
-	self._equipments_h = 0	
+	self._equipments_h = 0
 	local w = self._panel:w()
 	local name = self._panel:child("name")
 	local teammate_line = self._panel:child("teammate_line")
@@ -516,10 +524,10 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 	local bg_color = Holo:GetColor("Colors/Teammate")
 	local bg_alpha = Holo.Options:GetValue("HUDAlpha")
 	local padding = 2
-	local rows = 1	
+	local rows = 1
 	local prev
 	local h = 18
-	
+
 	for i, panel in pairs(self._special_equipment) do
 		panel:set_size(30, 16)
 		local amount = panel:child("amount")
@@ -530,13 +538,13 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 			main:set_name("bitmap_temp")
 			local flash = panel:child("bitmap")
 			if alive(flash) then
-				flash:set_name("bitmap_flash")				
+				flash:set_name("bitmap_flash")
 				flash:hide()
 			end
 			main:set_name("bitmap")
 			main:script().fixed = true
 		end
-		
+
 		if alive(amount) then
 			amount:configure({
 				font_size = panel:h(),
@@ -544,7 +552,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 				vertical = "center",
 				align = "right",
 				x = -padding,
-				y = 0,			
+				y = 0,
 				w = panel:w(),
 				rotation = 0,
 				h = panel:h(),
@@ -677,4 +685,4 @@ end)
 function HUDTeammate:_create_primary_weapon_firemode() self:_create_firemode() end
 function HUDTeammate:_create_secondary_weapon_firemode() self:_create_firemode(true) end
 function HUDTeammate:set_state(state) self:UpdateHolo() end
-function HUDTeammate:teammate_progress() end	
+function HUDTeammate:teammate_progress() end
